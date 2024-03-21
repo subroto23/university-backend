@@ -73,8 +73,24 @@ export const studentSchema = new Schema<TStudents>(
       type: String,
       required: true,
     },
-    name: userNameSchema,
-    gender: ['Male', 'Female', 'Other'],
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'users',
+      required: true,
+    },
+    name: {
+      type: userNameSchema,
+      required: true,
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ['Male', 'Female', 'Other'],
+        message:
+          "The geneder field can only be one of the following: 'Male' ,'Female' or 'Other' ",
+      },
+      required: true,
+    },
     dateOfBirth: {
       type: String,
       required: true,
@@ -99,8 +115,14 @@ export const studentSchema = new Schema<TStudents>(
       type: String,
       required: true,
     },
-    Guardian: GurdianNameSchema,
-    localGuardian: localGurdianSchema,
+    Guardian: {
+      type: GurdianNameSchema,
+      required: true,
+    },
+    localGuardian: {
+      type: localGurdianSchema,
+      required: true,
+    },
     profileImage: {
       type: String,
       required: true,
@@ -109,7 +131,7 @@ export const studentSchema = new Schema<TStudents>(
       type: String,
       required: true,
     },
-    isActive: ['active', 'inActive'],
+   
     isDeleted: {
       type: Boolean,
       default: false,
@@ -119,5 +141,23 @@ export const studentSchema = new Schema<TStudents>(
     timestamps: true,
   },
 );
+
+//Queary MiddleWare for find method
+studentSchema.pre('find', async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+//Queary MiddleWare for findOne method
+studentSchema.pre('findOne', async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+//Queary MiddleWare for aggregate method
+studentSchema.pre('aggregate', async function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
 
 export const StudentModel = model<TStudents>('Student', studentSchema);

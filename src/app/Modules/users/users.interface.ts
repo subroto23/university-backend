@@ -5,9 +5,3 @@ export type TUser = {
   role: 'admin' | 'student' | 'faculty';
   status: 'in-progress' | 'blocked';
 };
-
-export type TNewUser = {
-  password: string;
-  id: string;
-  role: string;
-};

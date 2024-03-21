@@ -1,7 +1,12 @@
-import express, { Application, Request, Response } from 'express';
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import { UserRoutes } from './app/Modules/users/users.route';
 import { studentRouter } from './app/Modules/students/students.route';
+import globalErrorHandler from './app/middleware/globalErrorHandler';
+import notFoundRoute from './app/middleware/notFoundRoute';
 const app: Application = express();
 
 //MiddleWate
@@ -20,8 +25,10 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hellow World');
 });
 
-//Eroor Route Globale Handle
-app.all('*', (req: Request, res: Response) => {
-  res.status(404).send('Route not found');
-});
+//Global Error Handler
+app.use(globalErrorHandler);
+
+//Not Found MiddleWare
+app.use(notFoundRoute);
+//
 export default app;

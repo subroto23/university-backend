@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 export type TUserName = {
   firstName: string;
   middleName?: string;
@@ -22,6 +24,7 @@ export type TLocalGurdian = {
 
 export type TStudents = {
   id: string;
+  user: Types.ObjectId;
   name: TUserName;
   gender: 'Male' | 'Female' | 'Other';
   dateOfBirth: string;
@@ -34,6 +37,5 @@ export type TStudents = {
   localGuardian: TLocalGurdian;
   profileImage: string;
   academicDepartment: string;
-  isActive: 'active' | 'inActive';
   isDeleted: boolean;
 };

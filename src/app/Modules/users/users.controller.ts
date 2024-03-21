@@ -1,27 +1,27 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { UserServices } from './users.service';
+import sendResponse from '../../utlis/sendResponse';
+import { StatusCodes } from 'http-status-codes';
 
-const createUsers = async (req: Request, res: Response) => {
+const createUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { password } = req.body;
-    // const zodParseData = userValidation.userValidationSchema.parse(studentData);
+    const { password, ...studentData } = req.body;
+    //Zod Validation in student Data
+    // const zodParseData = StudentValidationSchema.parse(studentData);
 
     //Services Functions Call
-    const result = await UserServices.createUsersIntoDB(password);
-
-    return res.json({
-      status: 200,
+    const result = await UserServices.createStudentIntoDB(
+      password,
+      studentData,
+    );
+    sendResponse(res, {
+      statusCodes: StatusCodes.OK,
       success: true,
-      message: 'User created Successfully',
+      message: 'Student Created Successfully',
       data: result,
     });
   } catch (err) {
-    res.json({
-      status: 500,
-      success: false,
-      message: 'User Not created',
-      data: err,
-    });
+    next(err);
   }
 };
 
