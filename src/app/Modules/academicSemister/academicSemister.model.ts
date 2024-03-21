@@ -38,6 +38,18 @@ const AcademicSemisterSchema = new Schema<TAcademicSemister>(
   },
 );
 
+//Same semester name assign in same Year Duplicate check and Error Therows
+AcademicSemisterSchema.pre('save', async function (next) {
+  const isSemesterExist = await AcademicSemisterModel.findOne({
+    year: this.year,
+    name: this.name,
+  });
+  if (isSemesterExist) {
+    throw new Error('Semester already exists');
+  }
+  next();
+});
+
 export const AcademicSemisterModel = model<TAcademicSemister>(
   'academicSemister',
   AcademicSemisterSchema,
