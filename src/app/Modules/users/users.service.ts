@@ -19,6 +19,8 @@ const createStudentIntoDB = async (
 
   //Use Manually Generated Id
   userData.id = '2024010001';
+  //Generated Id = Year semesterCode 4DigitsCode pattern
+  
 
   //Create a User
   const newUser = await UserModel.create(userData);

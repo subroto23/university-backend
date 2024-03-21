@@ -1,0 +1,44 @@
+import { Schema, model } from 'mongoose';
+import {
+  AcademicSemisterCode,
+  AcademicSemisterName,
+  months,
+} from './AcademicSemister.constant';
+import { TAcademicSemister } from './academicSemister.interface';
+
+const AcademicSemisterSchema = new Schema<TAcademicSemister>(
+  {
+    name: {
+      type: String,
+      enum: AcademicSemisterName,
+      required: true,
+    },
+    code: {
+      type: String,
+      enum: AcademicSemisterCode,
+      required: true,
+    },
+    year: {
+      type: String,
+      required: true,
+    },
+    startMonth: {
+      type: String,
+      enum: months,
+      required: true,
+    },
+    endMonth: {
+      type: String,
+      enum: months,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+
+export const AcademicSemisterModel = model<TAcademicSemister>(
+  'academicSemister',
+  AcademicSemisterSchema,
+);
