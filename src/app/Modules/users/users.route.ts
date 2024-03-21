@@ -4,4 +4,4 @@ const router = express.Router();
 
 router.post('/create-user', userController.createUsers);
 
-export const UserRoutes = router;
+export const UserRouter = router;
