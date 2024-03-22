@@ -21,6 +21,7 @@ export type TAcademicSemister = {
   year: string;
   startMonth: TMonth;
   endMonth: TMonth;
+  isDeleted: boolean;
 };
 
 export type TAcademicSemesteNameCodeMaper = {

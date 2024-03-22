@@ -4,6 +4,13 @@ import validationRequest from '../../middleware/ValidationRequest';
 import { academicSemesterValidations } from './academicSemister.validation';
 const routes = express.Router();
 
+//All Get Route
+routes.get('/', AcademicSemisterControllers.getAllAcademicSemesters);
+
+//Single Get Route
+routes.get('/:id', AcademicSemisterControllers.singleGetAcademicSemester);
+
+//Post Routes
 routes.post(
   '/create-academic-semister',
   validationRequest(
@@ -11,4 +18,8 @@ routes.post(
   ),
   AcademicSemisterControllers.createAcademicSemister,
 );
+
+//Delete Routes
+routes.delete('/:id', AcademicSemisterControllers.deleteAcademicSemester);
+
 export const AcademicSemisterRouter = routes;

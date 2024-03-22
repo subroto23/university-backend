@@ -32,6 +32,10 @@ const AcademicSemisterSchema = new Schema<TAcademicSemister>(
       enum: months,
       required: true,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
