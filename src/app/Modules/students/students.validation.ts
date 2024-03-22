@@ -111,6 +111,7 @@ const createStudentValidationSchema = z.object({
       .string()
       .min(3, { message: "Academic department can't be empty" })
       .max(100, { message: "Academic department can't exceed 100 characters" }),
+    academicSemester: z.string(),
     isActive: z.enum(['active', 'inActive']).default('active'),
     isDeleted: z.boolean().default(false),
   }),

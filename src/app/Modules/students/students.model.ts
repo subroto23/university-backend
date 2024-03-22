@@ -131,7 +131,11 @@ export const studentSchema = new Schema<TStudents>(
       type: String,
       required: true,
     },
-   
+    academicSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'academicSemister',
+    },
+
     isDeleted: {
       type: Boolean,
       default: false,

@@ -1,6 +1,9 @@
+import { TAcademicSemister } from './../academicSemister/academicSemister.interface';
 import config from '../../config';
+import { AcademicSemisterModel } from '../academicSemister/academicSemister.model';
 import { TStudents } from '../students/students.interface';
 import { StudentModel } from '../students/students.model';
+import { generatedStudentId } from './user.utlis';
 import { TUser } from './users.interface';
 import { UserModel } from './users.model';
 
@@ -16,11 +19,15 @@ const createStudentIntoDB = async (
 
   //user Role Create
   userData.role = 'student';
+  //Find Academic Semester Info
+  const admissionSemester = await AcademicSemisterModel.findById(
+    studentData.academicSemester,
+  );
 
-  //Use Manually Generated Id
-  userData.id = '2024010001';
-  //Generated Id = Year semesterCode 4DigitsCode pattern
-  
+  //Set generated Id
+  userData.id = await generatedStudentId(
+    admissionSemester as TAcademicSemister,
+  );
 
   //Create a User
   const newUser = await UserModel.create(userData);
