@@ -3,13 +3,16 @@ import { AcademicDepartmentModel } from './academicDepartment.model';
 
 //Get All Academic Faculty
 const getAllAcademicDepartmentFromDb = async () => {
-  const allAcademicSemesters = await AcademicDepartmentModel.find();
+  const allAcademicSemesters =
+    await AcademicDepartmentModel.find().populate('academicFaculty');
   return allAcademicSemesters;
 };
 
 //Get Single Academic Faculty
 const getSingleAcademicDepartmentFromDb = async (id: string) => {
-  const academicSemester = await AcademicDepartmentModel.findById({ _id: id });
+  const academicSemester = await AcademicDepartmentModel.findById({
+    _id: id,
+  }).populate('academicFaculty');
   return academicSemester;
 };
 //Create Academic Faculty

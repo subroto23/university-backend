@@ -75,7 +75,7 @@ export const studentSchema = new Schema<TStudents>(
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
+      ref: 'user',
       required: true,
     },
     name: {
@@ -128,7 +128,8 @@ export const studentSchema = new Schema<TStudents>(
       required: true,
     },
     academicDepartment: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'academicDepartment',
       required: true,
     },
     academicSemester: {
