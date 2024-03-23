@@ -12,7 +12,7 @@ const getAllAcademicFaculty = catchAsync(
     sendResponse(res, {
       success: true,
       statusCodes: StatusCodes.OK,
-      message: 'Academic Semister is created Successfully',
+      message: 'All Academic Faculty Getting Successfully',
       data: result,
     });
   },
@@ -28,7 +28,7 @@ const singleGetAcademicFaculty = catchAsync(
     sendResponse(res, {
       success: true,
       statusCodes: StatusCodes.OK,
-      message: 'Academic Semister is created Successfully',
+      message: 'Single Academic Faculty Getting Successfully',
       data: result,
     });
   },
