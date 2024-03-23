@@ -64,7 +64,7 @@ const deleteAcademicSemester = catchAsync(
     sendResponse(res, {
       success: true,
       statusCodes: StatusCodes.OK,
-      message: 'Academic Semister is created Successfully',
+      message: 'Academic Semister is deleted Successfully',
       data: result,
     });
   },
