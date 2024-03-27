@@ -72,6 +72,7 @@ export const studentSchema = new Schema<TStudents>(
     id: {
       type: String,
       required: true,
+      unique: true,
     },
     user: {
       type: Schema.Types.ObjectId,
@@ -98,6 +99,7 @@ export const studentSchema = new Schema<TStudents>(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     contactNo: {
       type: String,

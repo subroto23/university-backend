@@ -3,6 +3,7 @@ import { StudentModel } from './students.model';
 import AppErrors from '../../Errors/appErrors';
 import { StatusCodes } from 'http-status-codes';
 import { UserModel } from '../users/users.model';
+import { TStudents } from './students.interface';
 
 //Get All Students
 const getAllStudentsFromDB = async () => {
@@ -27,6 +28,43 @@ const getSingleStudentFromDB = async (id: string) => {
       },
     })
     .populate('academicSemester');
+  return result;
+};
+
+//Student Update Form DB
+const updateStudentFromDB = async (id: string, payload: Partial<TStudents>) => {
+  const { name, localGuardian, Guardian, ...reminingStudent } = payload;
+  const modifiedUpdateData: Record<string, unknown> = {
+    ...reminingStudent,
+  };
+  //check name and Key Value Update
+  if (name && Object.keys(name).length > 0) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedUpdateData[`name.${key}`] = value;
+    }
+  }
+  //check localGuardian and Key Value Update
+  if (localGuardian && Object.keys(localGuardian).length > 0) {
+    for (const [key, value] of Object.entries(localGuardian)) {
+      modifiedUpdateData[`localGuardian.${key}`] = value;
+    }
+  }
+  //check localGuardian and Key Value Update
+  if (Guardian && Object.keys(Guardian).length > 0) {
+    for (const [key, value] of Object.entries(Guardian)) {
+      modifiedUpdateData[`localGuardian.${key}`] = value;
+    }
+  }
+
+  const result = await StudentModel.findOneAndUpdate(
+    { id },
+    { $set: modifiedUpdateData },
+    {
+      new: true,
+      //For Mongoose Validations On Again
+      runValidators: true,
+    },
+  );
   return result;
 };
 
@@ -81,5 +119,6 @@ const deleteStudentsIntoDB = async (id: string) => {
 export const studentsServices = {
   getAllStudentsFromDB,
   getSingleStudentFromDB,
+  updateStudentFromDB,
   deleteStudentsIntoDB,
 };
