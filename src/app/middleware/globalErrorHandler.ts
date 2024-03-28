@@ -75,10 +75,9 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   // Function
   return res.status(statusCode).json({
     success: false,
-    message: err.message || message,
+    message: message || err.message,
     erroSourses: errorSourses,
     stack: config.node_Env === 'development' ? err?.stack : null,
-    err,
   });
 };
 export default globalErrorHandler;

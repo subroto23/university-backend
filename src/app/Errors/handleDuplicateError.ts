@@ -4,7 +4,7 @@ import { TErrorSource, TGenericError } from '../interface/Error';
 const handleDuplicateError = (err: any): TGenericError => {
   const statusCode = 400;
 
-  const match = err?.message?.match(/name: "([^"]+)"/);
+  const match = err?.message?.match(/"([^"]*)"/);
   const extractValueFromMessage = match && match[1];
   //Path And Message Find in ZOdError
   const errorSource: TErrorSource = [
