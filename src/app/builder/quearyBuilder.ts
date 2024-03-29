@@ -33,7 +33,8 @@ class QuearyBuilder<T> {
 
   //Sort
   sort() {
-    const sort = this?.query?.sort || '-createdAt';
+    const sort =
+      (this?.query?.fields as string)?.split(',')?.join(' ') || '-createdAt';
     this.quearyModel = this.quearyModel.sort(sort as string);
     return this;
   }
