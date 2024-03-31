@@ -1,8 +1,19 @@
-export type TUser = {
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+import { Model } from 'mongoose';
+export interface TUser {
   id: string;
   password: string;
   needsPasswordChange: boolean;
   isDeleted: boolean;
   role: 'admin' | 'student' | 'faculty';
   status: 'in-progress' | 'blocked';
-};
+}
+
+export interface IUser extends Model<TUser> {
+  isUserExistsByCutomId(id: string): Promise<TUser>;
+  isPasswordMatch(
+    plainTextPassword: string,
+    hashPassword: string,
+  ): Promise<boolean>;
+}

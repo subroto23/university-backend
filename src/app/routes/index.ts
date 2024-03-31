@@ -6,8 +6,13 @@ import { AcademicSemisterRouter } from '../Modules/academicSemister/academicSemi
 import { AcademicFacultyRouter } from '../Modules/academicFaculty/academicFaculty.route';
 import { AcademicDepartmentRouter } from '../Modules/academicDepartment/academicDepartment.route';
 import { CourseRouter } from '../Modules/courses/course.route';
+import { authRouter } from '../Modules/auth/auth.route';
 
 const moduleRoutes = [
+  {
+    path: '/auth',
+    route: authRouter,
+  },
   {
     path: '/users',
     route: UserRouter,

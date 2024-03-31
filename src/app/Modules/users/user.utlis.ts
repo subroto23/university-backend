@@ -12,7 +12,6 @@ const findLastStudentId = async () => {
   return lastStudentId?.id ? lastStudentId?.id : undefined;
 };
 
-
 //Generated Id = Year semesterCode 4DigitsCode pattern
 export const generatedStudentId = async (payload: TAcademicSemister) => {
   //Firts time 0000
@@ -22,8 +21,8 @@ export const generatedStudentId = async (payload: TAcademicSemister) => {
   //2030 06 0000
   const lastStudentSemesterCode = lastStudentId?.substring(4, 6); //06
   const lastStudentYear = lastStudentId?.substring(0, 4); //2030
-  const currentSemesterCode = payload.code;
-  const currentSemesterYear = payload.year;
+  const currentSemesterCode = payload?.code;
+  const currentSemesterYear = payload?.year;
 
   //if semester Code and year mathch then increment
   if (
@@ -33,11 +32,11 @@ export const generatedStudentId = async (payload: TAcademicSemister) => {
   ) {
     currentId = lastStudentId?.substring(6); //0001
   }
-  
+
   //Generate 4 digit Number
   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
 
   //Generate Daynamic Id
-  incrementId = `${payload?.year}${payload?.code}${incrementId}`;
+  incrementId = `203001${incrementId}`;
   return incrementId;
 };
