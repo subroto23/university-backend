@@ -1,8 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 import AppErrors from '../../Errors/appErrors';
 import { TLoginUser } from './auth.interface';
+import jwt from 'jsonwebtoken';
 
 import { UserModel } from '../users/users.model';
+import config from '../../config';
 
 const loginUser = async (payload: TLoginUser) => {
   const user = await UserModel.isUserExistsByCutomId(payload?.id);
@@ -24,8 +26,21 @@ const loginUser = async (payload: TLoginUser) => {
   if (!(await UserModel.isPasswordMatch(payload?.password, user?.password))) {
     throw new AppErrors(StatusCodes.FORBIDDEN, 'Password do not match');
   }
-  //access granted send access token and refresh token
+  //create token send to the client
+  const jwtPayload = {
+    id: user?.id,
+    role: user?.role,
+  };
+  const accessToken = jwt.sign(jwtPayload, config.jwt_Secret_key as string, {
+    expiresIn: '10d',
+  });
+
+  return {
+    accessToken,
+    needsPasswordsChange: user?.needsPasswordChange,
+  };
 };
+
 export const loginUserServices = {
   loginUser,
 };
