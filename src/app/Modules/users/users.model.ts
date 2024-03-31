@@ -70,4 +70,14 @@ userSchema.statics.isPasswordMatch = async function (
   return await bcrypt.compare(plainTextPassword, hashPassword);
 };
 
+//Jwt Issued Time and password Changed Time compared
+userSchema.statics.isJwtIssuesBeforePasswordChanged = async function (
+  passwordChangedTimeStamp: Date,
+  jwtIssuedTimeStamp: number,
+) {
+  const passwordChangedTime =
+    Number(new Date(passwordChangedTimeStamp).getTime()) / 1000;
+  return passwordChangedTime > jwtIssuedTimeStamp; // if false then jwtIssud token is old password based TOken
+};
+
 export const UserModel = model<TUser, IUser>('user', userSchema);

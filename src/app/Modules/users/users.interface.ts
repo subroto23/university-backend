@@ -17,4 +17,8 @@ export interface IUser extends Model<TUser> {
     plainTextPassword: string,
     hashPassword: string,
   ): Promise<boolean>;
+  isJwtIssuesBeforePasswordChanged(
+    passwordChangedTimeStamp: Date,
+    jwtIssuedTimeStamp: number,
+  ): Promise<boolean>;
 }
