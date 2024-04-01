@@ -18,8 +18,16 @@ const PasswordChangeValidationSchema = z.object({
     }),
   }),
 });
-
+//Refresh Validations Schema
+const refreshTokenValidationSchema = z.object({
+  cookies: z.object({
+    refresh_token: z.string({
+      required_error: 'Refresh token is Required',
+    }),
+  }),
+});
 export const authValidationSchema = {
   LoginValidationSchema,
   PasswordChangeValidationSchema,
+  refreshTokenValidationSchema,
 };

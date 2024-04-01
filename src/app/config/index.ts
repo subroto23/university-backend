@@ -10,4 +10,7 @@ export default {
   default_password: process.env.USER_DEFAULT_PASSWORD,
   hash_random_value: process.env.HASH_RANDOM_KEY,
   jwt_Secret_key: process.env.JWT_ACCESS_SECRET,
+  jwt_Access_express_key: process.env.JWT_ACCESS_EXPIRESS_IN,
+  jwt_Refresh_key: process.env.JWT_REFRESH_SECRET,
+  jwt_Refresh_Express_key: process.env.JWT_REFRESH_EXPIRESS_IN,
 };

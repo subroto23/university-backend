@@ -5,6 +5,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import globalErrorHandler from './app/middleware/globalErrorHandler';
 import notFoundRoute from './app/middleware/notFoundRoute';
+import cookieParser from 'cookie-parser';
 import router from './app/routes';
 const app: Application = express();
 
@@ -12,7 +13,7 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser());
 //ALL Routes
 app.use('/api/v1', router);
 

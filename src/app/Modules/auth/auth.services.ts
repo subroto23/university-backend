@@ -1,11 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
 import AppErrors from '../../Errors/appErrors';
 import { TLoginUser } from './auth.interface';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-
 import { UserModel } from '../users/users.model';
 import config from '../../config';
+import { createToken } from './auth.utlis';
+import jwt from 'jsonwebtoken';
 
 const loginUser = async (payload: TLoginUser) => {
   const user = await UserModel.isUserExistsByCutomId(payload?.id);
@@ -32,12 +33,21 @@ const loginUser = async (payload: TLoginUser) => {
     id: user?.id,
     role: user?.role,
   };
-  const accessToken = jwt.sign(jwtPayload, config.jwt_Secret_key as string, {
-    expiresIn: '10d',
-  });
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_Secret_key as string,
+    config.jwt_Access_express_key as string,
+  );
+  //create Refresh Token
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_Refresh_key as string,
+    config.jwt_Refresh_Express_key as string,
+  );
 
   return {
     accessToken,
+    refreshToken,
     needsPasswordsChange: user?.needsPasswordChange,
   };
 };
@@ -88,7 +98,59 @@ const changePassword = async (
   return result;
 };
 
+//Refresh Token
+const refreshToken = async (token: string) => {
+  //check if the token is valid
+  const decoded = jwt.verify(
+    token,
+    config.jwt_Refresh_key as string,
+  ) as JwtPayload;
+
+  const { id, iat } = decoded; //iat means token created time that includes autometic in token
+  const user = await UserModel.isUserExistsByCutomId(id);
+  //Checking if the user is Exists
+  if (!user) {
+    throw new AppErrors(StatusCodes.NOT_FOUND, 'User does not exist');
+  }
+  //checking jwt issues time and password Changed Time
+  if (
+    user?.passwordChangeAt &&
+    (await UserModel.isJwtIssuesBeforePasswordChanged(
+      user?.passwordChangeAt,
+      iat as number,
+    ))
+  ) {
+    throw new AppErrors(401, 'You are not authorized user');
+  }
+
+  //Checking if the user already in deleted
+  const isDeleted = user?.isDeleted;
+  if (isDeleted) {
+    throw new AppErrors(StatusCodes.FORBIDDEN, 'User is Deleted');
+  }
+  //checking if the user statas blocked
+  const userStatus = user?.status === 'blocked';
+  if (userStatus) {
+    throw new AppErrors(StatusCodes.FORBIDDEN, 'User is Blocked');
+  }
+  //token Create
+  //create token send to the client
+  const jwtPayload = {
+    id: user?.id,
+    role: user?.role,
+  };
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_Secret_key as string,
+    config.jwt_Access_express_key as string,
+  );
+  return {
+    accessToken,
+  };
+};
+
 export const loginUserServices = {
   loginUser,
   changePassword,
+  refreshToken,
 };
