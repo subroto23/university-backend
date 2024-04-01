@@ -29,4 +29,10 @@ routes.post(
   validationRequest(authValidationSchema.forgetPasswordValidationSchema),
   authControllers.forgetPassword,
 );
+//Reset - Password Route
+routes.post(
+  '/reset-password',
+  validationRequest(authValidationSchema.resetPasswordValidationSchema),
+  authControllers.resetPassword,
+);
 export const authRouter = routes;

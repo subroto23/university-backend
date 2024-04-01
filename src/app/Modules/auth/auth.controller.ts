@@ -63,9 +63,23 @@ const forgetPassword: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+//Reset Password
+const resetPassword: RequestHandler = catchAsync(async (req, res) => {
+  const token = req.headers?.authorization as string;
+  const result = await loginUserServices.resetPassword(req.body, token);
+  //Send Response
+  sendResponse(res, {
+    statusCodes: 200,
+    success: true,
+    message: 'Password reset Successfully',
+    data: result,
+  });
+});
+
 export const authControllers = {
   loginUser,
   ChangePassword,
   refreshToken,
   forgetPassword,
+  resetPassword,
 };
