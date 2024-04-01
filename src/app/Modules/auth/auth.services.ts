@@ -7,6 +7,7 @@ import { UserModel } from '../users/users.model';
 import config from '../../config';
 import { createToken } from './auth.utlis';
 import jwt from 'jsonwebtoken';
+import { sendEmail } from '../../utlis/sendEmail';
 
 const loginUser = async (payload: TLoginUser) => {
   const user = await UserModel.isUserExistsByCutomId(payload?.id);
@@ -149,8 +150,44 @@ const refreshToken = async (token: string) => {
   };
 };
 
+//forget- password
+const forgetPassword = async (id: string) => {
+  const user = await UserModel.isUserExistsByCutomId(id);
+  //Checking if the user is Exists
+  if (!user) {
+    throw new AppErrors(StatusCodes.NOT_FOUND, 'User does not exist');
+  }
+  //Checking if the user already in deleted
+  const isDeleted = user?.isDeleted;
+  if (isDeleted) {
+    throw new AppErrors(StatusCodes.FORBIDDEN, 'User is Deleted');
+  }
+  //checking if the user statas blocked
+  const userStatus = user?.status === 'blocked';
+  if (userStatus) {
+    throw new AppErrors(StatusCodes.FORBIDDEN, 'User is Blocked');
+  }
+  //create token send to the client
+  const jwtPayload = {
+    id: user?.id,
+    role: user?.role,
+  };
+  const resetToken = createToken(
+    jwtPayload,
+    config.jwt_Secret_key as string,
+    '10m',
+  );
+  //Send Url to Frontend Data
+  const resetUILink = `${config.frontend_url}?id=${user?.id}&token=${resetToken}`;
+
+  await sendEmail(user?.email, resetUILink);
+  return resetUILink;
+};
+
+//
 export const loginUserServices = {
   loginUser,
   changePassword,
   refreshToken,
+  forgetPassword,
 };

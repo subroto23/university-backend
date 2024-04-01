@@ -9,6 +9,9 @@ const userValidationSchema = z.object({
     .min(6, { message: 'Password must be at least 6 characters' })
     .optional()
     .default('phUniversity'),
+  email: z.string({
+    required_error: 'Email is required',
+  }),
   isDeleted: z.boolean().optional(),
 });
 

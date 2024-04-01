@@ -28,7 +28,9 @@ const createStudentIntoDB = async (
   userData.id = await generatedStudentId(
     admissionSemester as TAcademicSemister,
   );
-
+  if (studentData?.email) {
+    userData.email = studentData.email;
+  }
   //Create a User
   const newUser = await UserModel.create(userData);
 

@@ -50,9 +50,22 @@ const refreshToken: RequestHandler = catchAsync(async (req, res) => {
     data: result,
   });
 });
+//Forger Password
+const forgetPassword: RequestHandler = catchAsync(async (req, res) => {
+  const userId = req.body?.id;
+  const result = await loginUserServices.forgetPassword(userId);
+  //Send Response
+  sendResponse(res, {
+    statusCodes: 200,
+    success: true,
+    message: 'Access token is reterived Successfully',
+    data: result,
+  });
+});
 
 export const authControllers = {
   loginUser,
   ChangePassword,
   refreshToken,
+  forgetPassword,
 };
