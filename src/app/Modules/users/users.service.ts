@@ -6,6 +6,7 @@ import { StudentModel } from '../students/students.model';
 import { generatedStudentId } from './user.utlis';
 import { TUser } from './users.interface';
 import { UserModel } from './users.model';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const createStudentIntoDB = async (
   password: string,
@@ -43,6 +44,22 @@ const createStudentIntoDB = async (
     return newStudent;
   }
 };
+
+//My Profile Route
+const getMe = async (token: string) => {
+  //check if the token is valid
+  const decoded = jwt.verify(
+    token,
+    config.jwt_Secret_key as string,
+  ) as JwtPayload;
+
+  const { id, role } = decoded;
+
+  const result = await UserModel.findOne({ id, role });
+  return result;
+};
+
 export const UserServices = {
   createStudentIntoDB,
+  getMe,
 };
